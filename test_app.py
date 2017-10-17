@@ -2,6 +2,7 @@ import unittest
 from app import GameWindow
 from scene import Scene
 from constants import Signal
+from demoscenes import DummyScene
 
 class TestApp(unittest.TestCase):
 
@@ -9,6 +10,10 @@ class TestApp(unittest.TestCase):
 		self.SCREENWIDTH = 640
 		self.SCREENHEIGHT = 480
 		self.app = GameWindow('GameWindow Test', (self.SCREENWIDTH, self.SCREENHEIGHT)) 
+		class SubScene(Scene):
+			def __init__(self):
+				super().__init__('Scene subclass')
+		self.ss = SubScene()
 	
 
 	def tearDown(self):
@@ -33,15 +38,27 @@ class TestApp(unittest.TestCase):
 			# Test null name
 			self.app.register_scene(Scene(scene_name), None)
 
-			#	Test with non-Signal type signal
+			# Test with non-Signal type signal
 			self.app.register_scene(Scene(scene_name), scene_name, "NOT A SIGNAL CONSTANT")
 
 		# Test if scene registered properly
-		scene = Scene(scene_name)
+		scene = self.ss
 		sig = Signal.DUMMY
 		self.app.register_scene(scene, scene_name, sig)
-		self.assertEqual(self.app.scenedude[scene_name], scene)
+		self.assertEqual(self.app.current_scene, scene)
 		self.assertEqual(self.app.signalSceneDict[sig], scene)
+
+		# Test if the scene's screen size is set to the GameWindow's own size
+		self.assertEqual(scene.SCREENWIDTH, self.app.SCREENWIDTH)
+		self.assertEqual(scene.SCREENHEIGHT, self.app.SCREENHEIGHT)
+	
+	
+	@unittest.skip
+	def test_set_starting_scene(self):
+		dummy = DummyScene()
+		self.app.register_scene(dummy, dummy.name)
+		self.app.set_starting_scene(dummy.name)
+		self.assertEqual(dummy.name, self.app.current_scene.name)
 
 
 if __name__ == '__main__':

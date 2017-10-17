@@ -47,7 +47,9 @@ class SceneManager():
 class Scene():
 
 	def __init__(self, name):
-		self.name = name	
+		self.name = name
+		self.SCREENHEIGHT = 0
+		self.SCREENWIDTH = 0
 	
 
 	def handle_event(self, event):
@@ -57,6 +59,11 @@ class Scene():
 	def draw_scene(self, screen):
 		pass
 	
+	def set_screen_size(self, size):
+		if not isinstance(size, tuple) or len(size) != 2 or not all((type(n) is int for n in size)):
+			raise TypeError('size argument must be a tuple containing two integers!')
+		self.SCREENWIDTH, self.SCREENHEIGHT = size
+	
 
 	@property
 	def status(self):
@@ -65,3 +72,4 @@ class Scene():
 		keep running current Scene, or move to another one.
 		"""
 		raise NotImplementedError()
+	

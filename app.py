@@ -13,7 +13,7 @@ class GameWindow():
 		pygame.display.set_caption(title)
 		self.SCREENWIDTH = screen_size[0]
 		self.SCREENHEIGHT = screen_size[1]
-		self.scenedude = SceneManager()
+		self.__scenedude = SceneManager()
 		self.signalSceneDict = {}
 	
 
@@ -23,7 +23,8 @@ class GameWindow():
 		if name == None:
 			raise TypeError('name argument cannot be None!')
 
-		self.scenedude[name] = scene
+		scene.set_screen_size((self.SCREENWIDTH, self.SCREENHEIGHT))
+		self.__scenedude[name] = scene
 
 		if signal is None:
 			return
@@ -39,7 +40,15 @@ class GameWindow():
 	
 
 	def start(self):
-		pass
+		for signal in self.current_scene.status:
+			if signal == Signal.CONTINUE:
+				for event in pygame.event.get():
+					if event.type == QUIT:
+						self.quitgame()
+					else:
+						self.current_scene.handle_event(event)
+				self.current_scene.draw_scene(self.screen)
+				pygame.display.flip()
 	
 
 	def quitgame(self):
@@ -55,3 +64,8 @@ class GameWindow():
 	@property
 	def title(self):
 		return pygame.display.get_caption()[0]
+	
+	
+	@property
+	def current_scene(self):
+		return self.__scenedude.current

@@ -6,7 +6,8 @@ from copy import copy
 class TestScene(unittest.TestCase):
 
 	def setUp(self):
-		self.scene = Scene('blank')
+		self.sceneName = 'blank'
+		self.scene = Scene(self.sceneName)
 
 
 	def test_status(self):
@@ -31,11 +32,32 @@ class TestScene(unittest.TestCase):
 
 		scene = SceneA()
 		self.assertTrue(issubclass(type(scene), Scene))
+		self.assertTrue(type(scene) is SceneA)
+		self.assertFalse(type(scene) is Scene)
 
 		# check if status ever gives the STOP signal
 		self.assertTrue(any(signal == Signal.STOP for signal in scene.status)
 )
+	
+	
+	def test_getname(self):
+		self.scene.name == self.sceneName
+	
+	
+	def test_set_screen_size(self):
+		SCREENWIDTH = 800
+		SCREENHEIGHT = 600
+		self.scene.set_screen_size((800, 600))
+		self.assertEqual(self.scene.SCREENWIDTH, 800)
+		self.assertEqual(self.scene.SCREENHEIGHT, 600)
 
+		with self.assertRaises(TypeError):
+			self.scene.set_screen_size('a')
+			self.scene.set_screen_size(('abc', 'def'))
+			self.scene.set_screen_size((123, 'abc'))
+			self.scene.set_screen_size(('abc', 123))
+			self.scene.set_screen_size((123, 456, 769))
+			self.scene.set_screen_size((300.4, 300.0))
 
 
 class TestSceneManager(unittest.TestCase):
@@ -66,10 +88,6 @@ class TestSceneManager(unittest.TestCase):
 		# __currentscreen attribute is written by adding a new screen.
 		self.scenedude['blank'] = self.ss
 		self.assertEqual(self.scenedude.current, self.ss)
-		
-		
-		
-		
 		
 	
 
