@@ -15,6 +15,8 @@ class GameWindow():
 		self.SCREENHEIGHT = screen_size[1]
 		self.__scenedude = SceneManager()
 		self.signalSceneDict = {}
+		self.clock = pygame.time.Clock()
+		self.FPS = 60
 	
 
 	def register_scene(self, scene, name=None, signal=None):
@@ -64,6 +66,7 @@ class GameWindow():
 						self.current_scene.handle_event(event)
 				self.current_scene.draw_scene(self.screen)
 				pygame.display.flip()
+				self.clock.tick(self.FPS)
 	
 
 	def quitgame(self):
