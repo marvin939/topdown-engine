@@ -51,6 +51,30 @@ class TestApp(unittest.TestCase):
 		# Test if the scene's screen size is set to the GameWindow's own size
 		self.assertEqual(scene.SCREENWIDTH, self.app.SCREENWIDTH)
 		self.assertEqual(scene.SCREENHEIGHT, self.app.SCREENHEIGHT)
+
+		with self.assertRaises(TypeError):
+			# try registering without name (use default name of scene)
+			# try re-registering the same scene
+			dummy = DummyScene()
+			self.assertEqual(dummy.name, 'dummy')
+			self.app.register_scene(dummy)
+			self.app.register_scene(dummy)
+	
+
+	def test_scene_count(self):
+		self.app.register_scene(self.ss)
+		self.app.register_scene(DummyScene())
+		try:
+			self.app.register_scene(self.ss)
+			self.app.register_scene(self.ss)
+			self.app.register_scene(self.ss)
+			self.app.register_scene(DummyScene())
+			self.app.register_scene(DummyScene())
+			self.app.register_scene(DummyScene())
+			self.app.register_scene(DummyScene())
+		except TypeError:
+			pass
+		self.assertEqual(self.app.scene_count, 2)
 	
 	
 	@unittest.skip

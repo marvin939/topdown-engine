@@ -38,6 +38,11 @@ class SceneManager():
 		return self.__currentscene
 	
 
+	@property
+	def count(self):
+		return len(self.scenedict.items())
+	
+
 	def change_scene(self, scene_name):
 		self.__currentscene = self.scenedict[scene_name]
 		return self.current

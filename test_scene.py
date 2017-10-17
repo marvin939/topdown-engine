@@ -2,6 +2,7 @@ import unittest
 from scene import Scene, SceneManager
 from constants import Signal
 from copy import copy
+from demoscenes import DummyScene
 
 class TestScene(unittest.TestCase):
 
@@ -125,6 +126,14 @@ class TestSceneManager(unittest.TestCase):
 		with self.assertRaises(KeyError):
 			self.scenedude.change_scene('invalid-scene')
 			self.scenedude.change_scene(None)
+	
+	
+	def test_num_scenes(self):
+		self.scenedude['d'] = self.ss
+		self.scenedude['e'] = self.ss
+		self.scenedude['f'] = self.ss
+		self.scenedude['g'] = self.ss
+		self.assertEqual(self.scenedude.count, 4)
 	
 
 

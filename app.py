@@ -17,11 +17,26 @@ class GameWindow():
 		self.signalSceneDict = {}
 	
 
-	def register_scene(self, scene, name, signal=None):
+	def register_scene(self, scene, name=None, signal=None):
 		if scene == None:
 			raise TypeError('scene argument cannot be None!')
+		'''
+		if name == None and self.__scenedude[scene.name] is not None:
+			raise TypeError('A scene with the same name ({}) has already been registered!'.format(name))
+		'''
 		if name == None:
-			raise TypeError('name argument cannot be None!')
+			# check if an instance of the same name is already registered
+			tryScene = None
+			try:
+				tryScene = self.__scenedude[scene.name]
+			except KeyError:
+				pass
+			finally:
+				if tryScene != None:
+					raise TypeError('A scene with the same name ({}) has already been registered!'.format(name))
+				else:
+					name = scene.name
+
 
 		scene.set_screen_size((self.SCREENWIDTH, self.SCREENHEIGHT))
 		self.__scenedude[name] = scene
@@ -64,6 +79,11 @@ class GameWindow():
 	@property
 	def title(self):
 		return pygame.display.get_caption()[0]
+	
+
+	@property
+	def scene_count(self):
+		return self.__scenedude.count
 	
 	
 	@property

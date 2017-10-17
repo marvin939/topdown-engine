@@ -2,6 +2,6 @@ from demoscenes import DummyScene
 from app import GameWindow
 
 if __name__ == '__main__':
-	game = GameWindow()
+	game = GameWindow(title='[Demo] Headcrabs!!!', screen_size=(640, 480))
 	game.register_scene(DummyScene(), 'dummy')
 	game.start()
